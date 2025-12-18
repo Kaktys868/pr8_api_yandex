@@ -6,6 +6,37 @@ using System.Threading.Tasks;
 
 namespace Api_Yandex_True.Models
 {
+    //это для геокодинга
+    public class GeocodingResponse
+    {
+        public Response Response { get; set; }
+    }
+
+    public class Response
+    {
+        public GeoObjectCollection GeoObjectCollection { get; set; }
+    }
+
+    public class GeoObjectCollection
+    {
+        public FeatureMember[] FeatureMember { get; set; }
+    }
+
+    public class FeatureMember
+    {
+        public GeoObject GeoObject { get; set; }
+    }
+
+    public class GeoObject
+    {
+        public Point Point { get; set; }
+    }
+
+    public class Point
+    {
+        public string Pos { get; set; }
+    }
+    //это для погодыы
     public class DataResponce
     {
         public List<Forecast> forecasts { get; set; }
@@ -15,7 +46,13 @@ namespace Api_Yandex_True.Models
         public DateTime date { get; set; }
         public List<Hour> hours { get; set; }
     }
-    public class Hour
+    public class City
+    {
+        public string name { get; set; }
+        public float lat { get; set; }
+        public float lon { get; set; }
+    }
+        public class Hour
     {
         public string hour { get; set; }
         public string condition { get; set; }

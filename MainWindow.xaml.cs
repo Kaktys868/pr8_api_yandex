@@ -30,6 +30,7 @@ namespace Api_Yandex_True
         }
         public async void Iint()
         {
+            Days.Items.Clear();
             responce = await GetWeather.Get(58.01261f, 56.25439f);
             foreach (Forecast forecast in responce.forecasts)
                 Days.Items.Add(forecast.date.ToString("dd.MM.yyyy"));
@@ -52,6 +53,15 @@ namespace Api_Yandex_True
         private void UpdateWeather(object sender, RoutedEventArgs e)
         {
             Iint();
+        }
+
+        private async void Poisk(object sender, RoutedEventArgs e)
+        {
+            Days.Items.Clear();
+            responce = await GetWeather.City(city.Text);
+            foreach (Forecast forecast in responce.forecasts)
+                Days.Items.Add(forecast.date.ToString("dd.MM.yyyy"));
+            Create(0);
         }
     }
 }

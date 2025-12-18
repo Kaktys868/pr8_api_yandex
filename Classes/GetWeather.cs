@@ -34,5 +34,34 @@ namespace Api_Yandex_True.Classes
             }
             return dataResponse;
         }
+
+        public static async Task<DataResponce> City(string city)
+        {
+            float lat = 0, lon = 0;
+            string url = $"https://geocode-maps.yandex.ru/v1/?apikey=8e9e7022-52e6-4811-a6a0-950075beb89e&geocode={city}&lang=ru_RU&format=json";
+            using (HttpClient Client = new HttpClient())
+            {
+                using (HttpRequestMessage Request = new HttpRequestMessage(HttpMethod.Get, url))
+                {
+                    using (var Response = await Client.SendAsync(Request))
+                    {
+                        string ContentResponse = await Response.Content.ReadAsStringAsync();
+                        var geocodeResponse = JsonConvert.DeserializeObject<GeocodingResponse>(ContentResponse);
+                        var pointStr = geocodeResponse.Response.GeoObjectCollection.FeatureMember?.FirstOrDefault()?.GeoObject?.Point?.Pos;
+                        if (pointStr != null)
+                        {
+                            var coords = pointStr.Split(' ');
+                            if (coords.Length == 2)
+                            {
+                                float.TryParse(coords[1], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out lon);
+                                float.TryParse(coords[0], System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out lat);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return await Get(lat, lon);
+        }
     }
 }
